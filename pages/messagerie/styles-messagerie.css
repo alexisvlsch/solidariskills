@@ -1,0 +1,286 @@
+/* Variables globales pour l'interface de messagerie */
+:root {
+    --sidebar-width: 200px;
+    --primary-color: #005c5d;
+    --secondary-color: #127b8a;
+    --background-color: #f5f7f8;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --gap: 16px;
+    --shadow: 0 2px 8px #0001;
+}
+
+body, * {
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Barre latérale principale de navigation */
+aside.sidebar {
+    width: var(--sidebar-width);
+    background: #ffffff;
+    border-right: 1px solid var(--border-color);
+    padding: var(--gap) 0;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 65px;
+    height: calc(100vh - 60px);
+    z-index: 100;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar nav ul li {
+    margin-bottom: var(--gap);
+}
+.sidebar a {
+    display: block;
+    padding: 12px var(--gap);
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    transition: background .2s, color .2s;
+}
+.sidebar a.active,
+.sidebar a:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+/* Structure principale de la page */
+.main-layout {
+  display: flex;
+  position: relative;
+  padding-top: 65px;
+}
+
+/* Conteneur principal avec marge pour la barre latérale */
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color);
+  transition: margin-left 0.3s;
+  margin-left: var(--sidebar-width);
+  padding-left: calc(var(--gap) * 2);
+  height: calc(100vh - 65px);
+  overflow: hidden;
+}
+
+/* Structure de l'interface de messagerie */
+.messagerie-layout {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  background: var(--background-color);
+  margin: 0;
+}
+
+/* Barre latérale des conversations */
+.messagerie-sidebar {
+    width: 200px;
+    background: #fff;
+    border-right: 1px solid var(--border-color);
+    padding: 24px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+.messagerie-sidebar h2 {
+    font-size: 1.1em;
+    margin: 0 0 10px 24px;
+    color: var(--primary-color);
+    font-family: Arial, sans-serif;
+}
+.messagerie-sidebar ul {
+    list-style: none;
+    padding: 0 0 0 8px;
+    margin: 0 0 16px 0;
+}
+.messagerie-sidebar li {
+    margin-bottom: 8px;
+}
+.messagerie-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+.messagerie-sidebar a.active,
+.messagerie-sidebar a:hover {
+    background: #e6f3fa;
+    color: var(--primary-color);
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f5f5f5;
+}
+
+/* Zone principale d'affichage des messages */
+.messagerie-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    background: var(--background-color);
+}
+.discussion-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.messages-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Styles des bulles de messages */
+.message {
+    max-width: 60%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 1em;
+    position: relative;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+.message.sent {
+    align-self: flex-end;
+    background: #d1f7e8;
+    color: #11414b;
+}
+.message.received {
+    align-self: flex-start;
+    background: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+.msg-date {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 2px;
+    text-align: right;
+}
+
+/* Formulaire d'envoi de message */
+.send-message-form {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+.send-message-form textarea {
+    flex: 1;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 1em;
+    resize: none;
+    min-height: 40px;
+}
+.send-message-form button {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.send-message-form button:hover {
+    background: var(--secondary-color);
+}
+.no-discussion {
+    color: #888;
+    font-size: 1.1em;
+    margin-top: 80px;
+    text-align: center;
+}
+
+/* Gestion de la barre latérale rétractable */
+.messagerie-sidebar {
+    transition: width 0.3s, min-width 0.3s;
+    min-width: 200px;
+    position: relative;
+}
+.messagerie-sidebar.collapsed {
+    width: 48px !important;
+    min-width: 48px !important;
+    overflow: hidden;
+    padding: 0 !important;
+    border : none;
+    transition: with 0.3s, min-width 0.3s;
+}
+
+.messagerie-sidebar.collapsed .avatar {
+    margin: 0 auto;
+    display: block !important;
+}
+
+.messagerie-sidebar.collapsed h2,
+.messagerie-sidebar.collapsed ul,
+.messagerie-sidebar.collapsed a span {
+    display: none !important;
+}
+.toggle-messagerie-sidebar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.toggle-messagerie-sidebar:hover {
+  background: var(--secondary-color);
+}
+
+/* Adaptations pour écrans mobiles */
+@media (max-width: 900px) {
+    .messagerie-layout {
+        flex-direction: column;
+        margin-left: 0;
+    }
+    .messagerie-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: row;
+        gap: 0;
+        padding: 0;
+    }
+    .messagerie-main {
+        padding: 16px;
+    }
+}

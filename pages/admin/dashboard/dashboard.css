@@ -1,0 +1,83 @@
+/* dashbord.css */
+
+
+
+
+
+/* Section Statistiques */
+.statistiques {
+  padding-top: 80px;
+  text-align: center;
+}
+
+.titre-infos {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 40px;
+ 
+  font-size: 30px;
+  font-weight: bold;
+
+  color: #005c5d;
+  
+}
+
+.grille-statistiques {
+  display: flex;
+  justify-content: center; /* Centre les cercles */
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 60px; /* Espace propre entre les cercles */
+}
+
+.carte-statistique {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 160px;
+}
+
+.bloc-statistiques {
+  background: var(--card-bg); /* fond blanc */
+  padding: 40px;
+  border-radius: 12px; /* coins arrondis */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* petite ombre douce */
+  margin: 40px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.cercle-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00aaff, #ffffff);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cercle-centre {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.nombre {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00333d;
+}
+
+.carte-statistique p {
+  font-size: 16px;
+  font-weight: bold;
+  color: #00333d;
+}

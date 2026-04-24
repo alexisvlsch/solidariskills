@@ -1,0 +1,313 @@
+/* Variables globales */
+:root {
+  --primary-color: #005c5d;
+  --light-bg: #f5f7f8;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --border-radius: 8px;
+  --sidebar-width: 200px;
+  --gap: 16px;
+}
+
+/* Reset et styles de base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: var(--text-color);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--light-bg);
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  width: 100%; 
+  z-index: 1000; 
+  height: 65px; 
+}
+
+header .logo img {
+  height: 40px;
+}
+
+header .user img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+/* Main layout - adjust for fixed header */
+.main-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  transition: margin-left 0.3s;
+  position: relative;
+  padding-top: 65px; 
+}
+
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: var(--gap);
+  padding-left: calc(var(--gap) * 2); 
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: margin-left 0.3s;
+  margin-left: var(--sidebar-width);
+}
+
+.container h1 {
+  font-size: 24px;
+  margin-bottom: var(--gap);
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* Formulaire de modification */
+.activite-form {
+  background: var(--card-bg);
+  margin-top: var(--gap);
+  padding: var(--gap);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activite-form h2 {
+  font-size: 20px;
+  margin-bottom: var(--gap);
+  color: var(--primary-color);
+}
+
+.form-confirmation {
+  background: #d4edda;
+  color: #155724;
+  padding: var(--gap);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--gap);
+  font-weight: bold;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.form-group {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+input, textarea, select {
+  padding: 8px;
+  border-radius: var(--border-radius);
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-submit {
+  width: 100%;
+  text-align: center;
+  margin-top: var(--gap);
+}
+
+.form-submit button {
+  background: var(--primary-color);
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-submit button:hover {
+  background: #004646;
+}
+
+/* Multi-select styling */
+select[multiple] {
+  height: auto;
+  min-height: 120px;
+  padding: 8px;
+}
+
+select[multiple] option {
+  padding: 6px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+}
+
+select[multiple] option:checked {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.form-help {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Responsivité */
+@media (max-width: 900px) {
+  .form-grid {
+      flex-direction: column;
+  }
+
+  .form-group {
+      min-width: 100%;
+  }
+
+  .form-submit button {
+      width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 48px;
+  }
+  
+  .sidebar:not(.collapsed) {
+    width: var(--sidebar-width);
+    z-index: 1000;
+  }
+  
+  .container {
+    margin-left: 0;
+  }
+  
+  .sidebar:not(.collapsed) + .container,
+  .sidebar:not(.collapsed) ~ .container {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+/* Grille d'activités */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+
+.card-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 18px 18px 12px 18px;
+  width: 260px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #f5f7f8;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.card p {
+  font-size: 0.98rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+
+.sidebar.collapsed + .container,
+.sidebar.collapsed ~ .container {
+  margin-left: 0;
+  padding-left: calc(var(--gap) * 2); 
+}
+
+/* Grille d'activités avec scrollbar */
+.activites .card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  margin-top: 24px;
+  max-height: 500px; 
+  overflow-y: auto; 
+  padding-right: 8px; 
+}
+
+/* Style personnalisé pour la scrollbar */
+.activites .card-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.activites .card-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.activites .card-grid::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+.activites .card-grid::-webkit-scrollbar-thumb:hover {
+  background: #004646;
+}

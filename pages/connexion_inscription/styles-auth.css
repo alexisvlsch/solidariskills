@@ -1,0 +1,152 @@
+/* Styles de base pour les pages d'authentification */
+body{
+  font-family:Arial, sans-serif;
+  background:#f5f7f8;
+  margin:0;
+  padding:0;
+}
+
+.main-layout{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.container{
+  width:100%;
+  max-width:1000px;
+  padding:1rem;
+}
+
+/* Boîte contenant les formulaires d'authentification avec logo flottant */
+.auth-card{
+  position:relative;
+  display:flex;
+  background:#ffffff;
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.1);
+  width:100%;
+  max-width:900px;
+  margin:5rem auto 2rem auto;
+  overflow:hidden;
+  padding-top:60px;
+  padding-bottom:40px;
+}
+
+.auth-card::before{
+  content:'';
+  position:absolute;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
+  width:10%;
+  height:15%;
+  background:url('../../../frontend/images/logoBE.png') center/contain no-repeat;
+  z-index:2;
+}
+
+/* Styles des formulaires de connexion et inscription */
+.form-container{
+  flex:1;
+  padding:2.5rem 2rem;
+}
+
+.auth-card .form-container.active{
+  border-right:none;
+  position:relative;
+}
+.auth-card .form-container.active::after{
+  content:'';
+  position:absolute;
+  top:30%;
+  right:0;
+  transform:translateY(-50%);
+  height:40%;
+  width:1px;
+  background:#e0e0e0;
+}
+
+.form-group{ margin-bottom:1.2rem; }
+
+.form-group label{
+  display:block;
+  margin-bottom:0.4rem;
+  font-weight:bold;
+  color:#024059;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"]{
+  width:100%;
+  padding:0.7rem;
+  font-size:1rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+
+.password-conditions{
+  font-size:0.85rem;
+  margin-top:0.5rem;
+  color:#666;
+}
+.password-conditions ul{
+  margin:0.5rem 0 0;
+  padding-left:1.2rem;
+}
+
+/* Boutons d'action avec dégradé */
+.form-submit{ margin-top:1.8rem; }
+
+.form-submit button{
+  background:linear-gradient(to right,#007b8a,#ced4da);
+  color:#fff;
+  font-weight:bold;
+  padding:0.8rem;
+  border:none;
+  border-radius:8px;
+  width:100%;
+  cursor:pointer;
+  transition:background 0.3s ease;
+}
+.form-submit button:hover{ background:#005c5d; }
+
+/* Notifications et messages de retour */
+.message{
+  margin:1rem 0 0;
+  padding:0.6rem 1rem;
+  border-radius:8px;
+  font-size:0.9rem;
+  text-align:center;
+  font-weight:500;
+  width:100%;
+  box-sizing:border-box;
+  display:none;
+}
+.message.success{ background:#d4edda; color:#155724; }
+.message.error{ background:#f8d7da; color:#721c24; }
+
+/* Éléments de navigation et mentions légales */
+a{
+  font-size:0.9rem;
+  color:#024059;
+  text-decoration:none;
+}
+a:hover{ text-decoration:underline; }
+
+.terms-note{
+  margin-top:0.75rem;
+  font-size:0.84rem;
+  text-align:center;
+  color:#6c757d;
+  line-height:1.4;
+}
+
+.terms-note a{
+  color:#0061c2;
+  text-decoration:none;
+}
+.terms-note a:hover{
+  text-decoration:underline;
+}

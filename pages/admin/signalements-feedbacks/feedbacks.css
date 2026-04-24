@@ -1,0 +1,132 @@
+/*  Section principale  */
+.contenu {
+  padding: var(--gap);
+}
+
+.titre-section {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #005c5d;
+}
+
+/*  Tableau feedbacks  */
+.table-feedbacks {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.table-feedbacks th,
+.table-feedbacks td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 15px;
+  color: #333;
+  vertical-align: middle;
+}
+
+.table-feedbacks th {
+  background-color: #005c5d;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Limiter largeur de la 1re colonne (labels dans details) */
+.table-feedbacks td:first-child,
+.table-feedbacks th:first-child {
+  width: 220px;
+  max-width: 280px;
+  white-space: nowrap;
+}
+
+/* Hover ligne */
+.table-feedbacks tr:hover {
+  background-color: #f9f9f9;
+}
+
+/*  Étoiles notes  */
+.note-5, .note-4 {
+  color: #28a745;
+  font-weight: bold;
+}
+.note-3 {
+  color: #ffc107;
+  font-weight: bold;
+}
+.note-2, .note-1 {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/*  Boutons  */
+.btn-supprimer,
+.btn-consulter,
+.btn-valider,
+.btn-retour,
+.btn-valider-details {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.btn-supprimer {
+  background-color: #dc3545;
+}
+.btn-valider, .btn-valider-details {
+  background-color: #28a745;
+}
+
+.btn-supprimer:hover {
+  background-color: #c82333;
+}
+
+.btn-consulter:hover {
+  background-color: #075ca5;
+}
+
+.btn-valider:hover,
+.btn-valider-details:hover {
+  background-color: #0a8945;
+}
+
+.btn-retour:hover {
+  background-color: #0056b3;
+}
+
+.btn-retour, btn-valider-details {
+  margin-top: 10px;
+}
+
+
+/* Statut traité / non traité */
+.statut-traite {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.statut-non-traite {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+
+.actions-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap; /* si écran étroit */
+}
+
+.actions-buttons a {
+  white-space: nowrap; /* pour éviter le retour à la ligne du texte */
+}

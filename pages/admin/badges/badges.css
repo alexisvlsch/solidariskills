@@ -1,0 +1,275 @@
+/* badges.css */
+
+.contenu {
+    padding: var(--gap);
+  }
+  
+  .titre-section {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #005c5d;
+  }
+  
+  /* Tableau des badges */
+  .table-badges {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .table-badges th,
+  .table-badges td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 15px;
+    color: #333;
+    vertical-align: middle;
+  }
+  
+  .table-badges th {
+    background-color: #005c5d;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .table-badges tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+
+  .formulaire-ajout {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin-top: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .groupe-formulaire {
+    margin-bottom: 16px;
+  }
+  
+  .groupe-formulaire label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #005c5d;
+  }
+  
+  .groupe-formulaire input,
+  .groupe-formulaire textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  .bouton-formulaire {
+    text-align: right;
+  }
+  
+  .btn-valider {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-valider:hover {
+    background-color: #218838;
+  }
+
+  
+  .btn-retour {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    display: inline-block;
+    margin-top: 15px;
+    margin-right: 10px;
+  }
+  
+  .btn-retour:hover {
+    background-color: #0056b3;
+  }
+
+  
+  .btn-modifier {
+    background-color: #007bff;  /* bleu */
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 6px;
+  }
+  
+  .btn-modifier:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-supprimer {
+    background-color: #dc3545;  /* rouge */
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .btn-supprimer:hover {
+    background-color: #c82333;
+  }
+
+  .btn-modifier,
+.btn-supprimer,
+.btn-gerer {
+  margin-right: 6px;
+}
+
+
+    /* Bouton Gérer */
+.btn-gerer {
+    background-color: #28a745; /* bleu clair */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-gerer:hover {
+    background-color: #218838;
+  }
+  
+
+
+  /* utilisateur ayant un badge */
+  .table-badges-utilisateurs {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 30px;
+  }
+  
+  .table-badges-utilisateurs th,
+  .table-badges-utilisateurs td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 15px;
+    color: #333;
+  }
+  
+  .table-badges-utilisateurs th {
+    background-color: #005c5d;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .table-badges-utilisateurs tr:hover {
+    background-color: #f9f9f9;
+  }
+
+
+  /* Liste des badges attribués */
+.badge-user-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .badge-user-list li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+  }
+  
+  /* Bouton retirer */
+  .btn-retirer {
+    background-color: #dc3545;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  
+  .btn-retirer:hover {
+    background-color: #b02a37;
+  }
+  
+
+  
+  .form-attribuer {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+
+  
+  .form-attribuer select {
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    min-width: 260px;
+  }
+  
+  .btn-ajouter {
+    text-decoration: none; /* Supprime le soulignement */
+    background-color: #28a745;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-ajouter:hover {
+    background-color: #218838;
+  }
+  
+
+  /* Style pour le bouton "Créer un nouveau badge" */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+

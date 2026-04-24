@@ -1,0 +1,304 @@
+/* Variables globales pour le système d'avis */
+:root {
+  --primary-color: #005c5d;
+  --secondary-color: #008c8f;
+  --light-bg: #f5f7f8;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --border-radius: 10px;
+  --gap: 16px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --star-color: #f39c12;
+  --sidebar-width: 200px;
+}
+
+/* Structure principale de la page */
+.main-layout {
+  display: flex;
+  min-height: calc(100vh - 65px);
+  padding-top: 65px;
+}
+
+.container {
+  flex: 1;
+  padding: var(--gap);
+  padding-left: calc(var(--gap) * 2);
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s;
+  padding-bottom: 40px;
+}
+
+/* Message d'erreur avec fond rouge */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  border-left: 4px solid #dc3545;
+}
+
+/* Style des titres de page et de section */
+.main-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.section h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+  position: relative;
+  padding-left: 15px;
+}
+
+.section h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 5px;
+  background-color: var(--secondary-color);
+  border-radius: 3px;
+}
+
+/* Affichage des avis en grille responsive */
+.avis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Style de chaque carte d'avis */
+.avis-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.avis-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* En-tête des cartes d'avis avec informations utilisateur */
+.avis-header {
+  background: #f8f9fa;
+  padding: 15px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.avis-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-mini {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-name {
+  font-weight: bold;
+  display: block;
+  font-size: 0.95rem;
+}
+
+.avis-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.avis-rating {
+  color: var(--star-color);
+  font-size: 1rem;
+}
+
+/* Contenu du texte de l'avis */
+.avis-content {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.avis-content h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.avis-activity {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.avis-text {
+  line-height: 1.4;
+  color: var(--text-color);
+  flex-grow: 1;
+}
+
+/* Message affiché en absence d'avis */
+.no-data {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  border: 1px dashed #ddd;
+}
+
+/* Carte profil utilisateur avec avatar et évaluations */
+.user-profile {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-profile .user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--primary-color);
+    flex-shrink: 0;
+}
+
+.user-profile .user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-profile .user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile .profile-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.user-profile .user-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-profile .stars-large {
+    color: var(--star-color);
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.user-profile .user-description {
+    color: #555;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.user-profile .no-rating-large {
+    font-style: italic;
+    color: #888;
+    font-size: 1rem;
+}
+
+/* Lien de retour à la page précédente */
+a.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a.back-link:before {
+    content: "← ";
+}
+
+/* Message affiché si l'utilisateur n'a pas encore d'avis */
+.section .avis-message {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    border: 1px dashed #ddd;
+    margin-top: 10px;
+}
+
+/* Adaptations pour écrans mobiles */
+@media (max-width: 768px) {
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .user-rating {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+  .avis-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding-left: var(--gap);
+  }
+  
+  .avis-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .section h2 {
+    font-size: 20px;
+  }
+}
+
+/* Ajustement quand la barre latérale est rétractée */
+.sidebar.collapsed ~ .container {
+  margin-left: 0;
+}

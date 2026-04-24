@@ -1,0 +1,183 @@
+.profil-admin-card {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+  }
+  
+  .profil-admin-card p {
+    font-size: 16px;
+    margin-bottom: 14px;
+    color: #333;
+  }
+  
+  .boutons-profil {
+    margin-top: 20px;
+  }
+  
+  .btn-profil {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .btn-profil-deco {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .btn-profil:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-profil-deco:hover {
+    background-color: #b02a37;
+  }
+  
+  .btn-supprimer {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  .btn-supprimer:hover {
+    background-color: #b02a37;
+  }
+
+  .titre-section {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #005c5d;
+  }
+
+  /* Contenu principal */
+.contenu {
+  padding: var(--gap);
+}
+
+
+/* Formulaire de changement de mot de passe */
+.formulaire-ajout {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin-top: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.groupe-formulaire {
+  margin-bottom: 16px;
+}
+
+.groupe-formulaire label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #005c5d;
+}
+
+.groupe-formulaire input[type="motdepasse"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.groupe-formulaire input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.bouton-formulaire {
+  text-align: right;
+}
+
+.btn-valider {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-valider:hover {
+  background-color: #218838;
+}
+
+.btn-retour {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.btn-retour:hover {
+  background-color: #0056b3;
+}
+
+
+.conditions-mdp {
+  font-size: 0.85rem;
+  color: #666;
+  margin-left: 10px;
+}
+
+/* Tableau */
+.table-utilisateurs {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-utilisateurs th,
+.table-utilisateurs td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table-utilisateurs th {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+
+  /* Hover sur ligne */
+  .table-utilisateurs tr:hover {
+    background-color: #f9f9f9;
+  }
