@@ -1,0 +1,122 @@
+/* Variables CSS globales pour le menu */
+:root {
+  --primary-color: #005c5d;
+  --light-bg: #f5f7f8;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --border-radius: 8px;
+  --sidebar-width: 200px;
+  --gap: 16px;
+}
+
+/* Barre latérale du menu */
+aside.sidebar {
+  width: var(--sidebar-width);
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: var(--gap) 0;
+  transition: width 0.3s, margin-left 0.3s;
+  position: fixed;
+  top: 65px; 
+  left: 0;
+  height: calc(100vh - 65px); 
+  overflow-y: auto;
+  z-index: 90;
+}
+
+.sidebar nav ul {
+  list-style: none;
+}
+
+.sidebar nav ul li {
+  margin-bottom: var(--gap);
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px var(--gap);
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+
+/* Bouton de repli de la sidebar */
+.toggle-sidebar {
+  position: fixed;
+  left: 0;
+  top: 75px; 
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 0 6px 6px 0; 
+  width: 24px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 100; 
+  transition: left 0.3s;
+}
+
+.toggle-sidebar:hover {
+  background: #004646;
+}
+
+
+.sidebar:not(.collapsed) + .toggle-sidebar,
+.sidebar:not(.collapsed) ~ .toggle-sidebar {
+  left: var(--sidebar-width);
+}
+
+
+.sidebar.collapsed {
+  width: 0;
+  margin-left: -1px; 
+  overflow: hidden;
+}
+
+
+.sidebar.collapsed * {
+  visibility: hidden;
+}
+
+/* Contenu principal avec sidebar ouverte */
+.container {
+  transition: margin-left 0.3s, width 0.3s;
+  margin-left: var(--sidebar-width); 
+  width: calc(100% - var(--sidebar-width));
+}
+
+
+.sidebar.collapsed + .container,
+.sidebar.collapsed ~ .container {
+  margin-left: 0; 
+  width: 100%;
+}
+
+/* Responsive pour la sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 48px;
+  }
+  
+  .sidebar:not(.collapsed) {
+    width: var(--sidebar-width);
+    z-index: 1000;
+  }
+  
+  .container {
+    margin-left: 0;
+  }
+  
+  .sidebar:not(.collapsed) + .container,
+  .sidebar:not(.collapsed) ~ .container {
+    margin-left: var(--sidebar-width);
+  }
+}
