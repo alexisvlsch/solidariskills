@@ -1,0 +1,1008 @@
+-- ============================================
+-- Script Solidariskills
+-- ============================================
+
+
+Script décomposé en 2 grandes parties :
+
+    - Les requetes que nous manipulons dans les fichiers php
+    - Les requetes utilisées dans la BD pour son initialisation de tables et leur peuplement par défaut (+ quelques altérations de tables)
+ 
+ Ces parties sont séparées par un ligne de "-"
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+--- ADMIN ACTIVITÉS ---
+SELECT id_act, titre, description, localisation, date_activite FROM activite
+# Liste toutes les activités pour l'admin
+
+SELECT DISTINCT conditions_req FROM activite WHERE conditions_req IS NOT NULL
+# Récupère les conditions météo disponibles
+
+DELETE FROM activite WHERE id_act = :id_act
+# Supprime une activité (par admin)
+
+--- ADMIN PARTICIPANTS ---
+SELECT u.id, u.nom, u.email FROM utilisateur u JOIN participer p ON u.id = p.id WHERE p.id_act = :id_act
+# Liste les participants à une activité
+
+SELECT titre FROM activite WHERE id_act = :id_act
+# Récupère le titre d'une activité
+
+--- ADMIN BADGES ---
+SELECT id_badge, nom_badge, description_badge FROM badge ORDER BY id_badge ASC
+# Liste tous les badges
+
+INSERT INTO badge (nom_badge, description_badge) VALUES (:nom, :description)
+# Ajoute un nouveau badge
+
+UPDATE badge SET nom_badge = :nom, description_badge = :description WHERE id_badge = :id_badge
+# Met à jour un badge existant
+
+DELETE FROM badge WHERE id_badge = :id_badge
+# Supprime un badge
+
+SELECT u.id, u.nom AS nom_utilisateur, u.email, STRING_AGG(b.nom_badge, ', ') AS badges FROM attribuer ab JOIN utilisateur u ON ab.id = u.id JOIN badge b ON ab.id_badge = b.id_badge GROUP BY u.id, u.nom, u.email ORDER BY u.nom
+# Liste des utilisateurs avec leurs badges
+
+SELECT b.* FROM badge b JOIN attribuer a ON b.id_badge = a.id_badge WHERE a.id = :id_user
+# Récupère tous les badges d'un utilisateur
+
+SELECT 1 FROM attribuer WHERE id = :id_user AND id_badge = :id_badge
+# Vérifie si un badge est déjà attribué
+
+INSERT INTO attribuer (id, id_badge) VALUES (:id_user, :id_badge)
+# Attribue un badge à un utilisateur
+
+INSERT INTO attribuer (id, id_badge) VALUES (:id, :id_badge) ON CONFLICT DO NOTHING
+# Attribue un badge sans erreur s'il est déjà attribué
+
+DELETE FROM attribuer WHERE id = :id_user AND id_badge = :id_badge
+# Retire un badge à un utilisateur
+
+--- ADMIN FEEDBACK ---
+SELECT f.id_fb, f.titre_fb, f.note_fb, f.commentaire_fb, f.date_fb, f.traite, u.nom AS nom_utilisateur, a.titre AS titre_activite FROM feedback f JOIN utilisateur u ON f.id_user = u.id JOIN activite a ON f.id_act = a.id_act ORDER BY f.date_fb DESC
+# Liste tous les feedbacks avec leurs détails
+
+SELECT f.*, u.nom AS nom_utilisateur, a.titre AS titre_activite, ad.email AS email_admin FROM feedback f JOIN utilisateur u ON f.id_user = u.id JOIN activite a ON f.id_act = a.id_act LEFT JOIN admin ad ON f.id_admin_gerant = ad.id_admin WHERE f.id_fb = :id_fb
+# Récupère les détails complets d'un feedback
+
+UPDATE feedback SET traite = TRUE WHERE id_fb = :id_fb
+# Marque un feedback comme traité
+
+DELETE FROM feedback WHERE id_fb = :id_fb
+# Supprime un feedback
+
+--- ADMIN UTILISATEURS ---
+SELECT nom, email, adresse, statut, description, ville, code_postal FROM utilisateur WHERE id = :id
+# Récupère les détails complets d'un utilisateur
+
+UPDATE utilisateur SET nom = :nom, email = :email, statut = :statut, description = :description, adresse = :adresse, ville = :ville, code_postal = :code_postal WHERE id = :id
+# Met à jour le profil complet d'un utilisateur
+
+DELETE FROM utilisateur WHERE id = :id
+# Supprime un utilisateur
+
+--- ADMIN DASHBOARD ---
+SELECT COUNT(*) FROM utilisateur
+# Compte le nombre total d'utilisateurs
+
+SELECT COUNT(*) FROM activite
+# Compte le nombre total d'activités
+
+SELECT COUNT(*) FROM feedback
+# Compte le nombre total de feedbacks
+
+SELECT COUNT(*) FROM reserver
+# Compte le nombre total de réservations
+
+--- ADMIN PARAMÈTRES ---
+SELECT email FROM admin WHERE id_admin = :id_admin
+# Récupère l'email d'un administrateur
+
+SELECT id, nom, email FROM utilisateur WHERE statut = 'Admin'
+# Liste tous les utilisateurs avec le statut Admin
+
+UPDATE utilisateur SET statut = 'Membre' WHERE id = :id
+# Retire les droits d'admin à un utilisateur
+
+UPDATE admin SET email = :email WHERE id_admin = :id_admin
+# Met à jour l'email d'un administrateur
+
+UPDATE admin SET mdp = :hash WHERE id_admin = :id_admin
+# Met à jour le mot de passe d'un administrateur
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--- PROFIL UTILISATEUR ---
+SELECT * FROM utilisateur WHERE id = :id
+# Récupère toutes les informations d'un utilisateur
+
+UPDATE utilisateur SET nom = :nom, email = :email, ville = :ville, code_postal = :code_postal, num_rue = :num_rue, adresse = :adresse, statut = :statut, description = :description, imagepdp = :imagepdp WHERE id = :id
+# Met à jour les informations du profil utilisateur
+
+SELECT password_hash FROM utilisateur WHERE id = :id
+# Récupère le hash du mot de passe d'un utilisateur
+
+UPDATE utilisateur SET password_hash = :hash WHERE id = :id
+# Met à jour le mot de passe d'un utilisateur
+
+--- BADGES ---
+SELECT b.nom_badge FROM badge b INNER JOIN attribuer a ON b.id_badge = a.id_badge WHERE a.id = :id
+# Récupère les badges d'un utilisateur
+
+SELECT b.nom_badge AS badge FROM attribuer a INNER JOIN badge b ON a.id_badge = b.id_badge WHERE a.id = :user_id
+# Liste les badges attribués à un utilisateur
+
+--- CONTACTS ET AMIS ---
+SELECT u.nom, u.email, u.imagepdp FROM utilisateur u JOIN ajouter a ON ((a.id_user_source = :id_user AND a.id_user_cible = u.id) OR (a.id_user_cible = :id_user AND a.id_user_source = u.id)) WHERE a.statut = 'accepté' AND u.id != :id_user
+# Récupère les contacts acceptés d'un utilisateur
+
+SELECT u.nom, u.email, a.statut FROM utilisateur u JOIN ajouter a ON a.id_user_cible = u.id WHERE a.id_user_source = :id_user AND u.id != :id_user
+# Récupère les demandes d'ami envoyées
+
+SELECT u.id, u.nom, u.email, a.statut FROM utilisateur u JOIN ajouter a ON a.id_user_source = u.id WHERE a.id_user_cible = :id_user AND a.statut = 'en_attente'
+# Récupère les demandes d'ami reçues
+
+SELECT * FROM ajouter WHERE id_user_source = :me AND id_user_cible = :cible
+# Vérifie si une demande d'ami existe déjà
+
+INSERT INTO ajouter (id_user_source, id_user_cible, statut) VALUES (:me, :cible, 'en_attente')
+# Envoie une demande d'ami
+
+UPDATE ajouter SET statut = 'accepté' WHERE id_user_source = :src AND id_user_cible = :me
+# Accepte une demande d'ami
+
+UPDATE ajouter SET statut = 'refusé' WHERE id_user_source = :src AND id_user_cible = :me
+# Refuse une demande d'ami
+
+--- DISCUSSIONS ET MESSAGES ---
+SELECT u.id, u.nom, u.imagepdp, MAX(m.date_msg) as last_msg FROM utilisateur u JOIN message m ON ((m.id_expediteur = :id_user AND m.id_destinataire = u.id) OR (m.id_destinataire = :id_user AND m.id_expediteur = u.id)) WHERE u.id != :id_user GROUP BY u.id, u.nom, u.imagepdp ORDER BY last_msg DESC
+# Récupère les discussions récentes d'un utilisateur
+
+SELECT m.*, u.nom, u.imagepdp FROM message m JOIN utilisateur u ON u.id = m.id_expediteur WHERE (m.id_expediteur = :me AND m.id_destinataire = :other) OR (m.id_expediteur = :other AND m.id_destinataire = :me) ORDER BY m.date_msg ASC
+# Récupère les messages d'une conversation
+
+SELECT nom, imagepdp FROM utilisateur WHERE id = :id
+# Récupère les informations de base d'un utilisateur
+
+--- AVIS ET FEEDBACK ---
+SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'feedback'
+# Vérifie si la table feedback existe
+
+SELECT AVG(f.note_fb) AS note_moyenne, COUNT(f.note_fb) AS nombre_avis FROM feedback f JOIN activite a ON f.id_act = a.id_act WHERE a.id_createur = :id_createur
+# Calcule la note moyenne d'un créateur d'activités
+
+SELECT f.*, a.titre as titre_activite, a.date_activite, u.nom as nom_utilisateur, u.imagepdp FROM feedback f JOIN activite a ON f.id_act = a.id_act JOIN utilisateur u ON f.id_user = u.id WHERE a.id_createur = :id_createur ORDER BY f.date_fb DESC
+# Récupère les avis reçus par un utilisateur
+
+SELECT f.*, a.titre as titre_activite, a.date_activite, u.nom as nom_createur FROM feedback f JOIN activite a ON f.id_act = a.id_act JOIN utilisateur u ON a.id_createur = u.id WHERE f.id_user = :id_user ORDER BY f.date_fb DESC
+# Récupère les avis donnés par un utilisateur
+
+SELECT COUNT(*) FROM feedback WHERE id_user = :id_user AND id_act = :id_act
+# Vérifie si un utilisateur a déjà laissé un avis sur une activité
+
+INSERT INTO feedback (titre_fb, note_fb, commentaire_fb, date_fb, id_user, id_act) VALUES (:titre_fb, :note_fb, :commentaire_fb, CURRENT_DATE, :id_user, :id_act)
+# Ajoute un avis sur une activité
+
+--- MESSAGERIE ---
+INSERT INTO message (contenu_msg, id_expediteur, id_destinataire) VALUES (:contenu, :exp, :dest)
+# Envoie un message entre utilisateurs
+
+--- COMPÉTENCES ---
+DELETE FROM gerer_cpu WHERE id = :id_user
+# Supprime toutes les compétences d'un utilisateur
+
+INSERT INTO gerer_cpu (id, id_competence) VALUES (:id_user, :id_competence)
+# Associe une compétence à un utilisateur
+
+SELECT nom FROM competence WHERE id_competence IN ($placeholders)
+# Récupère les noms des compétences selon leurs IDs
+
+SELECT c.id_competence, c.nom FROM competence c JOIN gerer_cpu g ON c.id_competence = g.id_competence WHERE g.id = :id_user
+# Récupère les compétences d'un utilisateur connecté
+
+SELECT id_competence, nom, categorie, niveau FROM competence WHERE id_competence IN ($placeholders)
+# Récupère les détails des compétences selon leurs IDs
+
+SELECT id_competence, nom FROM competence WHERE categorie = :categorie ORDER BY nom
+# Liste les compétences d'une catégorie spécifique
+
+--- AUTHENTIFICATION ---
+SELECT id FROM utilisateur WHERE email = :email
+# Vérifie si un email existe déjà
+
+INSERT INTO utilisateur (email, password_hash, nom, statut) VALUES (:email, :hash, :username, 'Membre')
+# Crée un nouveau compte utilisateur
+
+SELECT id_admin, mdp FROM admin WHERE email = :email
+# Vérifie les identifiants d'un administrateur
+
+SELECT id, password_hash, statut FROM utilisateur WHERE email = :email
+# Vérifie les identifiants d'un utilisateur
+
+--- ACTIVITÉS ---
+SELECT id_act FROM activite WHERE id_act = :id_act AND id_createur = :id_user
+# Vérifie si l'utilisateur est bien le créateur de l'activité
+
+DELETE FROM reserver WHERE id_act = :id_act
+# Supprime les réservations liées à une activité
+
+DELETE FROM participer WHERE id_act = :id_act
+# Supprime les participations à une activité
+
+DELETE FROM activite WHERE id_act = :id_act AND id_createur = :id_user
+# Supprime une activité
+
+SELECT COUNT(*) FROM participer WHERE id = :id AND id_act = :id_act
+# Vérifie si un utilisateur participe déjà à une activité
+
+SELECT nb_places FROM activite WHERE id_act = :id_act
+# Récupère le nombre de places disponibles pour une activité
+
+SELECT COUNT(*) FROM participer WHERE id_act = :id_act
+# Compte le nombre de participants à une activité
+
+INSERT INTO participer (id, id_act) VALUES (:id, :id_act)
+# Inscrit un utilisateur à une activité
+
+INSERT INTO reserver (id, id_act, date_reservation) VALUES (:id, :id_act, :date_reservation)
+# Enregistre une réservation pour une activité
+
+SELECT * FROM activite WHERE id_act = :id_act AND id_createur = :id_user
+# Récupère les détails d'une activité créée par l'utilisateur
+
+SELECT n.id_competence FROM necessite n WHERE n.id_act = :id_act
+# Récupère les compétences requises pour une activité
+
+UPDATE activite SET titre = :titre, description = :description, localisation = :localisation, conditions_req = :conditions_req, date_activite = :date_activite, nb_places = :nb_places, theme = :theme WHERE id_act = :id_act AND id_createur = :id_user
+# Met à jour les informations d'une activité
+
+DELETE FROM necessite WHERE id_act = :id_act
+# Supprime les compétences requises pour une activité
+
+INSERT INTO necessite (id_act, id_competence) VALUES (:id_act, :id_competence)
+# Ajoute une compétence requise pour une activité
+
+DELETE FROM participer WHERE id = :id_user AND id_act = :id_act
+# Désinscrit un utilisateur d'une activité
+
+SELECT a.*, a.theme, m.condition_meteo, m.temperature_meteo, u.nom AS createur_nom, u.imagepdp AS createur_avatar, u.id AS createur_id FROM activite a LEFT JOIN meteo m ON a.loc_meteo = m.loc_meteo AND a.date_meteo = m.date_meteo LEFT JOIN utilisateur u ON a.id_createur = u.id WHERE a.id_act = :id
+# Récupère les détails complets d'une activité avec météo et créateur
+
+SELECT c.nom, c.niveau FROM competence c JOIN necessite n ON c.id_competence = n.id_competence WHERE n.id_act = :id
+# Récupère les compétences requises avec leur niveau pour une activité
+
+SELECT id_act, titre, description, theme FROM activite WHERE date_activite >= CURRENT_DATE ORDER BY id_act DESC
+# Liste les activités à venir
+
+INSERT INTO activite (titre, description, localisation, nb_places, conditions_req, date_activite, theme, id_createur) VALUES (:titre, :description, :localisation, :nb_places, :conditions_req, :date_activite, :theme, :id_createur)
+# Crée une nouvelle activité
+
+DELETE FROM participer WHERE id = ? AND id_act IN ($placeholders)
+# Désinscrit un utilisateur de plusieurs activités à la fois
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+  
+
+
+-- Création de la table admin
+CREATE TABLE admin (
+    id_admin SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    mdp VARCHAR(255) NOT NULL
+);
+
+-- Création de la table utilisateur (corrigée)
+CREATE TABLE utilisateur (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+    nom VARCHAR(100) NOT NULL,
+    num_rue INT CHECK (num_rue BETWEEN 1 AND 99),
+    adresse VARCHAR(255),
+    code_postal INT CHECK (code_postal BETWEEN 0 AND 99999),
+    ville VARCHAR(100),
+    date_inscription DATE DEFAULT CURRENT_DATE,
+    statut VARCHAR(10) NOT NULL CHECK (statut IN ('Admin', 'Membre')),
+    nb_points INT DEFAULT 0,
+    id_admin_gerant INT,
+    description TEXT,
+    imagePDP VARCHAR(255),
+    
+    FOREIGN KEY (id_admin_gerant) REFERENCES admin(id_admin)
+);
+
+-- Météo
+CREATE TABLE meteo (
+    loc_meteo VARCHAR(100),
+    date_meteo DATE,
+    condition_meteo VARCHAR(20) CHECK (condition_meteo IN ('Sec', 'Pluie', 'Neige')),
+    temperature_meteo INT CHECK (temperature_meteo BETWEEN -50 AND 50),
+    PRIMARY KEY (loc_meteo, date_meteo)
+);
+
+-- Activité
+CREATE TABLE activite (
+    id_act SERIAL PRIMARY KEY,
+    titre VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    localisation VARCHAR(100) NOT NULL,
+    nb_places INT NOT NULL CHECK (nb_places >= 1),
+    conditions_req VARCHAR(20) CHECK (conditions_req IN ('Sec', 'Pluie', 'Neige', 'NULL')),
+    loc_meteo VARCHAR(100),
+    date_meteo DATE,
+    id_admin INT,
+    date_activite DATE NOT NULL,
+    FOREIGN KEY (loc_meteo, date_meteo) REFERENCES meteo(loc_meteo, date_meteo),
+    FOREIGN KEY (id_admin) REFERENCES admin(id_admin)
+);
+
+-- Compétence
+CREATE TABLE competence (
+    id_competence SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    categorie VARCHAR(50),
+    niveau VARCHAR(20) CHECK (niveau IN ('débutant', 'intermédiaire', 'expert')),
+    id_admin_gerant INT,
+    FOREIGN KEY (id_admin_gerant) REFERENCES admin(id_admin)
+);
+
+-- Badge
+CREATE TABLE badge (
+    id_badge SERIAL PRIMARY KEY,
+    nom_badge VARCHAR(50) NOT NULL,
+    description_badge VARCHAR(255)
+);
+
+-- Feedback
+CREATE TABLE feedback (
+    id_fb SERIAL PRIMARY KEY,
+    titre_fb VARCHAR(100) NOT NULL,
+    note_fb INT CHECK (note_fb BETWEEN 1 AND 5) NOT NULL,
+    commentaire_fb TEXT,
+    date_fb DATE NOT NULL,
+    id_user INT NOT NULL,
+    id_act INT NOT NULL,
+    id_admin_gerant INT,
+    FOREIGN KEY (id_user) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_act) REFERENCES activite(id_act),
+    FOREIGN KEY (id_admin_gerant) REFERENCES admin(id_admin)
+);
+
+-- Message
+CREATE TABLE message (
+    id_msg SERIAL PRIMARY KEY,
+    contenu_msg VARCHAR(255) NOT NULL,
+    date_msg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_expediteur INT NOT NULL REFERENCES utilisateur(id),
+    id_destinataire INT NOT NULL REFERENCES utilisateur(id)
+);
+
+-- Calendrier
+CREATE TABLE calendrier (
+    id_calendrier SERIAL PRIMARY KEY,
+    date_calendrier TIMESTAMP NOT NULL,
+    type_evenement VARCHAR(20) CHECK (type_evenement IN ('Activité', 'Disponibilité', 'Rappel')),
+    id_act INT REFERENCES activite(id_act),
+    id_user INT REFERENCES utilisateur(id)
+);
+
+-- Associations n,n
+CREATE TABLE attribuer (
+    id INT NOT NULL,
+    id_badge INT NOT NULL,
+    PRIMARY KEY (id, id_badge),
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_badge) REFERENCES badge(id_badge)
+);
+
+CREATE TABLE reserver (
+    id INT NOT NULL,
+    id_act INT NOT NULL,
+    date_reservation DATE NOT NULL,
+    PRIMARY KEY (id, id_act),
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_act) REFERENCES activite(id_act)
+);
+
+CREATE TABLE gerer_cpu (
+    id INT NOT NULL,
+    id_competence INT NOT NULL,
+    PRIMARY KEY (id, id_competence),
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_competence) REFERENCES competence(id_competence)
+);
+
+CREATE TABLE participer (
+    id INT NOT NULL,
+    id_act INT NOT NULL,
+    PRIMARY KEY (id, id_act),
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_act) REFERENCES activite(id_act)
+);
+
+CREATE TABLE necessite (
+    id_act INT NOT NULL,
+    id_competence INT NOT NULL,
+    PRIMARY KEY (id_act, id_competence),
+    FOREIGN KEY (id_act) REFERENCES activite(id_act),
+    FOREIGN KEY (id_competence) REFERENCES competence(id_competence)
+);
+
+CREATE TABLE ajouter (
+    id_user_source INT NOT NULL,
+    id_user_cible INT NOT NULL,
+    date_ajt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(20) DEFAULT 'en_attente' CHECK (statut IN ('en_attente', 'accepté', 'refusé')),
+    PRIMARY KEY (id_user_source, id_user_cible),
+    FOREIGN KEY (id_user_source) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_user_cible) REFERENCES utilisateur(id),
+    CONSTRAINT no_self_contact CHECK (id_user_source <> id_user_cible)
+);
+
+-- Association ternaire
+CREATE TABLE ajouterd (
+    id_admin INT NOT NULL,
+    id INT NOT NULL,
+    date_cr DATE NOT NULL,
+    heure_debut TIME NOT NULL,
+    PRIMARY KEY (id_admin, id, date_cr, heure_debut),
+    FOREIGN KEY (id_admin) REFERENCES admin(id_admin),
+    FOREIGN KEY (id) REFERENCES utilisateur(id)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- 1 activité par thème, avec date_activite, theme et id_createur
+INSERT INTO activite (
+  titre,
+  description,
+  localisation,
+  nb_places,
+  conditions_req,
+  loc_meteo,
+  date_meteo,
+  id_admin,
+  date_activite,
+  theme,
+  id_createur
+) VALUES
+-- Jardinage
+(
+  'Découverte du jardin écologique',
+  'Initiez-vous aux bases du jardinage durable en pleine nature.',
+  'Jardin public',
+  15,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-01',
+  'jardinage',
+  12
+),
+
+-- Programmation
+(
+  'Initiation à Python pour tous',
+  'Apprenez les concepts fondamentaux de Python et écrivez vos premiers scripts.',
+  'Salle informatique',
+  20,
+  'Pluie',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-02',
+  'programmation',
+  12
+),
+
+-- Poterie
+(
+  'Atelier de poterie pour débutants',
+  'Modelage, centrage et décoration : réalisez votre première pièce en argile.',
+  'Atelier d art local',
+  10,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-03',
+  'poterie',
+  12
+),
+
+-- Sport
+(
+  'Initiation au basketball',
+  'Maîtrisez les fondamentaux du basketball en équipe et sur grand terrain.',
+  'Terrain municipal',
+  12,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-04',
+  'sport',
+  12
+),
+
+-- Cuisine
+(
+  'Atelier cuisine italienne',
+  'Réalisez pâtes fraîches et sauce tomate maison dans une ambiance conviviale.',
+  'Cuisine communautaire',
+  8,
+  'Pluie',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-05',
+  'cuisine',
+  12
+),
+
+-- Musique
+(
+  'Découverte de la guitare acoustique',
+  'Apprenez vos premiers accords et jouez une mélodie simple.',
+  'Studio de musique',
+  10,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-06',
+  'musique',
+  12
+),
+
+-- Photographie
+(
+  'Balade photo urbaine',
+  'Explorez les techniques de cadrage et de composition en ville.',
+  'Centre-ville',
+  20,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-07',
+  'photo',
+  12
+),
+
+-- Bricolage
+(
+  'Réparation de meubles en bois',
+  'Apprenez à démonter, réparer et remonter un petit meuble endommagé.',
+  'Garage associatif',
+  6,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-08',
+  'bricolage',
+  12
+),
+
+-- Lecture
+(
+  'Club de lecture mensuel',
+  'Partagez vos impressions et analyses d’un roman sélectionné.</p>',
+  'Bibliothèque municipale',
+  25,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-09',
+  'lecture',
+  12
+),
+
+-- Écriture
+(
+  'Atelier d’écriture créative',
+  'Exercices et conseils pour rédiger votre première courte histoire.',
+  'Médiathèque',
+  15,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-10',
+  'écriture',
+  12
+),
+
+-- Ski
+(
+  'Cours de ski alpin débutant',
+  'Initiez-vous aux techniques de base du ski alpin avec un moniteur.',
+  'Station des Neiges',
+  20,
+  'Neige',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-11',
+  'ski',
+  12
+),
+
+-- Autre
+(
+  'Découverte surprise',
+  'Une activité surprise pour explorer une nouvelle compétence.',
+  'Lieu à déterminer',
+  30,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-12',
+  'Autre',
+  12
+);
+
+
+INSERT INTO activite (
+  titre,
+  description,
+  localisation,
+  nb_places,
+  conditions_req,
+  loc_meteo,
+  date_meteo,
+  id_admin,
+  date_activite,
+  theme,
+  id_createur
+) VALUES
+-- Jardinage
+(
+  'Création d’un compost collectif',
+  'Apprenez à transformer vos déchets organiques en compost naturel.',
+  'Parc municipal',
+  12,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-13',
+  'jardinage',
+  13
+),
+
+-- Programmation
+(
+  'Jeux vidéo en JavaScript',
+  'Créez un mini-jeu interactif avec HTML, CSS et JavaScript.',
+  'Salle multimédia',
+  15,
+  'Pluie',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-14',
+  'programmation',
+  13
+),
+
+-- Poterie
+(
+  'Sculpture sur argile',
+  'Apprenez les techniques de base pour sculpter des formes artistiques.',
+  'Atelier associatif',
+  8,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-15',
+  'poterie',
+  13
+),
+
+-- Sport
+(
+  'Découverte du yoga en plein air',
+  'Relaxation et renforcement musculaire au cœur de la nature.',
+  'Parc du centre-ville',
+  20,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-16',
+  'sport',
+  13
+),
+
+-- Cuisine
+(
+  'Recettes végétariennes express',
+  'Préparez des plats équilibrés et rapides à base de produits frais.',
+  'Salle de cuisine partagée',
+  10,
+  'Pluie',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-17',
+  'cuisine',
+  13
+),
+
+-- Musique
+(
+  'Chorale solidaire',
+  'Chantez en groupe des morceaux simples et harmonieux.',
+  'Salle des fêtes',
+  25,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-18',
+  'musique',
+  13
+),
+
+-- Photographie
+(
+  'Photo nature et biodiversité',
+  'Capturez la faune et la flore locale avec votre appareil.',
+  'Forêt domaniale',
+  15,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-19',
+  'photo',
+  13
+),
+
+-- Bricolage
+(
+  'Création d’un nichoir à oiseaux',
+  'Fabriquez un abri pour oiseaux avec du bois recyclé.',
+  'Atelier communautaire',
+  10,
+  'Sec',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-20',
+  'bricolage',
+  13
+),
+
+-- Lecture
+(
+  'Lecture à voix haute intergénérationnelle',
+  'Lisez des histoires à des enfants ou personnes âgées.',
+  'Maison de quartier',
+  20,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-21',
+  'lecture',
+  13
+),
+
+-- Écriture
+(
+  'Écrire une lettre à son futur soi',
+  'Prenez un moment pour rédiger une lettre personnelle à ouvrir dans 5 ans.',
+  'Salle polyvalente',
+  12,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-22',
+  'écriture',
+  13
+),
+
+-- Ski
+(
+  'Balade en raquettes et initiation',
+  'Explorez un sentier enneigé et découvrez la marche en raquettes.',
+  'Station des Cimes',
+  15,
+  'Neige',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-23',
+  'ski',
+  13
+),
+
+-- Autre
+(
+  'Atelier de sensibilisation écologique',
+  'Jeu de rôle et échanges autour de la transition écologique.',
+  'Maison des associations',
+  25,
+  'NULL',
+  NULL,
+  NULL,
+  NULL,
+  '2025-06-24',
+  'Autre',
+  13
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- 1) Ajouter la colonne (NULL par défaut)
+ALTER TABLE activite
+  ADD COLUMN competence_req INT;
+
+-- 2) Créer la contrainte de clé étrangère
+ALTER TABLE activite
+  ADD CONSTRAINT fk_activite_competence
+  FOREIGN KEY (competence_req)
+  REFERENCES competence(id_competence);
+
+
+
+
+
+
+
+
+
+
+INSERT INTO competence (nom, categorie, niveau) VALUES
+-- Jardinage
+('Planter et semer des graines',             'jardinage',      'débutant'),
+('Tailler et entretenir des arbustes',        'jardinage',      'débutant'),
+('Composer et entretenir un potager',         'jardinage',      'débutant'),
+('Reconnaître maladies et ravageurs',         'jardinage',      'débutant'),
+('Amender et fertiliser le sol',              'jardinage',      'débutant'),
+
+-- Programmation
+('Écrire et commenter une fonction MVC',     'programmation',  'débutant'),
+('Interroger et modifier une BDD SQL',        'programmation',  'débutant'),
+('Déboguer et tester du code',                'programmation',  'débutant'),
+('Consommer une API REST',                    'programmation',  'débutant'),
+('Gérer le versioning avec Git',              'programmation',  'débutant'),
+
+-- Poterie
+('Modeler l’argile à la main',                'poterie',        'débutant'),
+('Utiliser et centrer l’argile sur un tour',  'poterie',        'débutant'),
+('Appliquer et maîtriser les émaux',          'poterie',        'débutant'),
+('Contrôler les cuissons',                    'poterie',        'débutant'),
+('Décorer avec engobes et incision',          'poterie',        'débutant'),
+
+-- Sport
+('Réaliser un échauffement efficace',         'sport',          'débutant'),
+('Maîtriser techniques de base (passes/tirs)','sport',          'débutant'),
+('Gérer endurance et récupération',           'sport',          'débutant'),
+('Appliquer règles de sécurité',              'sport',          'débutant'),
+('Concevoir plan d’entraînement',             'sport',          'débutant'),
+
+-- Cuisine
+('Maîtriser découpe et taillage',             'cuisine',        'débutant'),
+('Préparer sauces et vinaigrettes',           'cuisine',        'débutant'),
+('Contrôler la cuisson',                      'cuisine',        'débutant'),
+('Assaisonner et équilibrer saveurs',         'cuisine',        'débutant'),
+('Dresser une assiette professionnelle',      'cuisine',        'débutant'),
+
+-- Musique
+('Lire une partition (clé de sol/fa)',        'musique',        'débutant'),
+('Tenir le rythme et métronome',              'musique',        'débutant'),
+('Jouer un instrument (accords de base)',     'musique',        'débutant'),
+('Chanter juste et gérer la respiration',     'musique',        'débutant'),
+('Composer une courte mélodie',               'musique',        'débutant'),
+
+-- Photographie
+('Composer une image (règle des tiers)',      'photo',          'débutant'),
+('Maîtriser l’exposition',                    'photo',          'débutant'),
+('Utiliser mise au point manuelle',           'photo',          'débutant'),
+('Post-traitement basique (Lightroom)',       'photo',          'débutant'),
+('Choisir le bon objectif',                   'photo',          'débutant'),
+
+-- Bricolage
+('Utiliser outils courants',                  'bricolage',      'débutant'),
+('Mesurer, tracer et découper',               'bricolage',      'débutant'),
+('Assembler et fixer',                        'bricolage',      'débutant'),
+('Poncer et peindre une finition',            'bricolage',      'débutant'),
+('Monter un meuble en kit',                   'bricolage',      'débutant'),
+
+-- Lecture
+('Identifier le thème principal',             'lecture',        'débutant'),
+('Prendre des notes efficacement',            'lecture',        'débutant'),
+('Analyser le style et registre',             'lecture',        'débutant'),
+('Résumer un texte de manière concise',       'lecture',        'débutant'),
+('Émettre une critique argumentée',           'lecture',        'débutant'),
+
+-- Écriture
+('Structurer un texte (plan, chapitres)',     'écriture',       'débutant'),
+('Rédiger un titre accrocheur',               'écriture',       'débutant'),
+('Employer un vocabulaire précis',            'écriture',       'débutant'),
+('Corriger et relire pour éliminer fautes',   'écriture',       'débutant'),
+('Adapter le ton au public',                  'écriture',       'débutant'),
+
+-- Ski
+('Glisser et freiner en chasse-neige',        'ski',            'débutant'),
+('Effectuer des virages parallèles',          'ski',            'débutant'),
+('Gérer équilibre et appui',                  'ski',            'débutant'),
+('Monter/descendre téléski',                  'ski',            'débutant'),
+('Adapter posture en terrain varié',          'ski',            'débutant'),
+
+-- Autre
+('Capacité d’adaptation rapide',              'Autre',          'débutant'),
+('Esprit critique et résolution de problèmes','Autre',          'débutant'),
+('Gestion du temps et des priorités',         'Autre',          'débutant'),
+('Communication orale et écrite claire',      'Autre',          'débutant'),
+('Travail en équipe et esprit collaboratif',  'Autre',          'débutant');
