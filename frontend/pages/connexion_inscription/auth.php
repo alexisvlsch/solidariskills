@@ -160,6 +160,6 @@ if (isset($_SESSION['user_id'])) {
       }
     }
   </script>
-  <?php include '../frontend/footer.php'; ?>
+  <?php include '../../footer/footer.php'; ?>
 </body>
 </html>

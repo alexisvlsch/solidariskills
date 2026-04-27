@@ -43,24 +43,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email_ajout'])) {
     $email = trim($_POST['email_ajout']);
     if ($email === '') {
         $popup_message = "L'adresse email ne peut pas être vide.";
-    } elseif ($email === $_SESSION['email']) {
-        $popup_message = "Vous ne pouvez pas vous ajouter vous-même.";
     } else {
-        $stmt = $pdo->prepare("SELECT id FROM utilisateur WHERE email = :email");
-        $stmt->execute([':email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$user) {
-            $popup_message = "Aucun utilisateur trouvé avec cet email.";
+        // Récupère l'email de l'utilisateur connecté pour la vérification auto-ajout
+        $stmtSelf = $pdo->prepare("SELECT email FROM utilisateur WHERE id = :id");
+        $stmtSelf->execute([':id' => $id_user]);
+        $selfEmail = $stmtSelf->fetchColumn();
+        if ($email === $selfEmail) {
+            $popup_message = "Vous ne pouvez pas vous ajouter vous-même.";
         } else {
-            $id_cible = $user['id'];
-            $stmt = $pdo->prepare("SELECT * FROM ajouter WHERE id_user_source = :me AND id_user_cible = :cible");
-            $stmt->execute([':me' => $id_user, ':cible' => $id_cible]);
-            if ($stmt->fetch()) {
-                $popup_message = "Une demande existe déjà pour cet utilisateur.";
+            $stmt = $pdo->prepare("SELECT id FROM utilisateur WHERE email = :email");
+            $stmt->execute([':email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$user) {
+                $popup_message = "Aucun utilisateur trouvé avec cet email.";
             } else {
-                $stmt = $pdo->prepare("INSERT INTO ajouter (id_user_source, id_user_cible, statut) VALUES (:me, :cible, 'en_attente')");
+                $id_cible = $user['id'];
+                $stmt = $pdo->prepare("SELECT * FROM ajouter WHERE id_user_source = :me AND id_user_cible = :cible");
                 $stmt->execute([':me' => $id_user, ':cible' => $id_cible]);
-                $popup_message = "success";
+                if ($stmt->fetch()) {
+                    $popup_message = "Une demande existe déjà pour cet utilisateur.";
+                } else {
+                    $stmt = $pdo->prepare("INSERT INTO ajouter (id_user_source, id_user_cible, statut) VALUES (:me, :cible, 'en_attente')");
+                    $stmt->execute([':me' => $id_user, ':cible' => $id_cible]);
+                    $popup_message = "success";
+                }
             }
         }
     }

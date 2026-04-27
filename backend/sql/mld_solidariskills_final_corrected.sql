@@ -49,13 +49,18 @@ CREATE TABLE activite (
     description VARCHAR(255),
     localisation VARCHAR(100) NOT NULL,
     nb_places INT NOT NULL CHECK (nb_places >= 1),
-    conditions_req VARCHAR(20) CHECK (conditions_req IN ('Sec', 'Pluie', 'Neige', 'NULL')),
+    conditions_req VARCHAR(20) CHECK (conditions_req IN ('Sec', 'Pluie', 'Neige')),
     loc_meteo VARCHAR(100),
     date_meteo DATE,
     id_admin INT,
     date_activite DATE NOT NULL,
+    theme VARCHAR(50),
+    id_createur INT,
+    competence_req INT,
     FOREIGN KEY (loc_meteo, date_meteo) REFERENCES meteo(loc_meteo, date_meteo),
-    FOREIGN KEY (id_admin) REFERENCES admin(id_admin)
+    FOREIGN KEY (id_admin) REFERENCES admin(id_admin),
+    FOREIGN KEY (id_createur) REFERENCES utilisateur(id),
+    FOREIGN KEY (competence_req) REFERENCES competence(id_competence)
 );
 
 -- Compétence
@@ -82,6 +87,7 @@ CREATE TABLE feedback (
     note_fb INT CHECK (note_fb BETWEEN 1 AND 5) NOT NULL,
     commentaire_fb TEXT,
     date_fb DATE NOT NULL,
+    traite BOOLEAN NOT NULL DEFAULT FALSE,
     id_user INT NOT NULL,
     id_act INT NOT NULL,
     id_admin_gerant INT,
@@ -280,7 +286,7 @@ INSERT INTO activite (
   'Apprenez vos premiers accords et jouez une mélodie simple.',
   'Studio de musique',
   10,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -325,7 +331,7 @@ INSERT INTO activite (
   'Partagez vos impressions et analyses d’un roman sélectionné.</p>',
   'Bibliothèque municipale',
   25,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -340,7 +346,7 @@ INSERT INTO activite (
   'Exercices et conseils pour rédiger votre première courte histoire.',
   'Médiathèque',
   15,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -370,7 +376,7 @@ INSERT INTO activite (
   'Une activité surprise pour explorer une nouvelle compétence.',
   'Lieu à déterminer',
   30,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -474,7 +480,7 @@ INSERT INTO activite (
   'Chantez en groupe des morceaux simples et harmonieux.',
   'Salle des fêtes',
   25,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -519,7 +525,7 @@ INSERT INTO activite (
   'Lisez des histoires à des enfants ou personnes âgées.',
   'Maison de quartier',
   20,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -534,7 +540,7 @@ INSERT INTO activite (
   'Prenez un moment pour rédiger une lettre personnelle à ouvrir dans 5 ans.',
   'Salle polyvalente',
   12,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -564,7 +570,7 @@ INSERT INTO activite (
   'Jeu de rôle et échanges autour de la transition écologique.',
   'Maison des associations',
   25,
-  'NULL',
+  NULL,
   NULL,
   NULL,
   NULL,
@@ -578,22 +584,6 @@ INSERT INTO activite (
 
 
 
-
-
-
-
-
-
-
--- 1) Ajouter la colonne (NULL par défaut)
-ALTER TABLE activite
-  ADD COLUMN competence_req INT;
-
--- 2) Créer la contrainte de clé étrangère
-ALTER TABLE activite
-  ADD CONSTRAINT fk_activite_competence
-  FOREIGN KEY (competence_req)
-  REFERENCES competence(id_competence);
 
 
 

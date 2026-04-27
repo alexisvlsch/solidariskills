@@ -1,14 +1,8 @@
 <?php
+require_once('../admin_auth.php');
 
 // Connexion à la base de données
-require_once('../../../../backend/config.php'); 
-
-// Vérification de la session
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// recuperation des données de l'utilisateur
+require_once('../../../../backend/config.php');
 $utilisateurs = $pdo->query("SELECT id, nom, email, statut FROM utilisateur")->fetchAll(PDO::FETCH_ASSOC);
 
 ?>

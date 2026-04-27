@@ -1,7 +1,6 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 // Vérifier que les paramètres sont bien passés dans l'URL
 if (!isset($_GET['id']) || !isset($_GET['id_badge']) || !is_numeric($_GET['id']) || !is_numeric($_GET['id_badge'])) {

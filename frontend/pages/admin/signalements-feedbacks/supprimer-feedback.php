@@ -1,10 +1,8 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php'); 
 
 // Activer les erreurs
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Vérifie que l’ID est fourni
 if (isset($_GET['id_fb']) && is_numeric($_GET['id_fb'])) {

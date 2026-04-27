@@ -1,7 +1,6 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 // Récupère tous les badges
 $stmt = $pdo->query("SELECT id_badge, nom_badge, description_badge FROM badge ORDER BY id_badge ASC");

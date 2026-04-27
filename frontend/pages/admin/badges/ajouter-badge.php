@@ -1,7 +1,6 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 $message = '';
 
