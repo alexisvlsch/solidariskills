@@ -1,12 +1,10 @@
 <?php
+require_once('../admin_auth.php');
 
 // Connexion à la base de données
 require_once('../../../../backend/config.php'); 
 
 // Vérification de la session
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // recuperation des données des activités
 $activites = $pdo->query("SELECT id_act, titre, description, localisation, date_activite FROM activite")->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +32,7 @@ $activites = $pdo->query("SELECT id_act, titre, description, localisation, date_
   <div class="principal">
 
     <!-- Barre du haut -->
-    <?php $pageTitle = "Gestion d'Activtés"; ?>
+    <?php $pageTitle = "Gestion d'Activités"; ?>
     <?php include("../barreHaut.php"); ?>
 
     <!-- Contenu principal -->
@@ -69,7 +67,7 @@ $activites = $pdo->query("SELECT id_act, titre, description, localisation, date_
               <div class="boutons-actions" >
                 <a href="modifier-activite.php?id=<?= $a['id_act'] ?>" class="btn-modifier">Modifier</a>
                 <a href="participants.php?id_act=<?= $a['id_act'] ?>" class="btn-consulter">Participants</a>
-                <a href="supprimer-activite.php?id_act=<?= $a['id_act'] ?> " class="btn-supprimer" onclick="return confirm('Supprimer cette activité ? ');">Supprimer</a>
+                <a href="supprimer-activite.php?id_act=<?= $a['id_act'] ?>" class="btn-supprimer" onclick="return confirm('Supprimer cette activité ? ');">Supprimer</a>
               </div>
             </td>
           </tr>

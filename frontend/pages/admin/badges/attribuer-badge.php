@@ -1,4 +1,5 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id_user = (int)$_POST['id_user'];

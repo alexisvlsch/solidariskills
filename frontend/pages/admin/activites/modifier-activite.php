@@ -1,12 +1,10 @@
 <?php
+require_once('../admin_auth.php');
 
 // Connexion à la base de données
 require_once('../../../../backend/config.php'); 
 
 // Vérification de la session
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Vérifie la présence de l'ID dans l'URL
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -38,12 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date_activite = $_POST['date_activite'] ?? '';
     $conditions_req_post = $_POST['conditions_req'] ?? null;
 
-    // Validation des données
+    // Validation des données (valeur vide = NULL autorisé)
     $allowed_conditions = ['Sec', 'Pluie', 'Neige'];
-    if (!in_array($conditions_req_post, $allowed_conditions)) {
+    if ($conditions_req_post !== '' && !in_array($conditions_req_post, $allowed_conditions, true)) {
         echo "Condition météo invalide.";
         exit;
     }
+    $conditions_req_post = $conditions_req_post !== '' ? $conditions_req_post : null;
 
     if ($titre && $description && $localisation && $date_activite) {
         $stmt = $pdo->prepare("UPDATE activite SET titre = :titre, description = :description, localisation = :localisation, date_activite = :date_activite, conditions_req = :conditions_req WHERE id_act = :id");
@@ -84,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- Partie principale -->
   <div class="principal">
     <!-- Barre du haut -->
-    <?php $pageTitle = "Gestion d'Activtés"; ?>
+    <?php $pageTitle = "Gestion d'Activités"; ?>
     <?php include("../barreHaut.php"); ?>
 
     <!-- Formulaire de modification -->

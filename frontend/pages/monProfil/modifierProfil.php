@@ -2,8 +2,12 @@
 session_start();
 require_once('../../../backend/config.php');
 
-// Gère la modification du profil utilisateur
-$id_user = $_SESSION['user_id'] ?? 1;
+// Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../connexion_inscription/auth.php');
+    exit;
+}
+$id_user = $_SESSION['user_id'];
 
 $success = false;
 $password_message = '';

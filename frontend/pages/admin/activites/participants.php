@@ -1,15 +1,5 @@
 <?php
-
-
-
-session_start();
-/*
-if (!isset($_SESSION['admin_id']) || $_SESSION['user_type'] !== 'admin') {
-    header("Location: ../../../../backend/connexion.php");
-    exit;
-}
-*/
-
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
 
 $id_act = $_GET['id_act'] ?? null;

@@ -2,15 +2,8 @@
 
 // verifier si la session est déjà démarrée
 // Si la session n'est pas déjà démarrée, démarrez-la
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php'); 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Récupération de l’ID admin depuis la session
 $admin_id = $_SESSION['admin_id'] ?? null;

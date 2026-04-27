@@ -1,12 +1,8 @@
 <?php
+require_once('../admin_auth.php');
 
 // Connexion à la base de données
-require_once('../../../../backend/config.php'); 
-
-// Vérification de la session
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once('../../../../backend/config.php');
 
 
 $nbUtilisateurs = $pdo->query("SELECT COUNT(*) FROM utilisateur")->fetchColumn();

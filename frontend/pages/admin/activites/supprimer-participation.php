@@ -1,4 +1,5 @@
 <?php
+require_once('../admin_auth.php');
 require_once('../../../../backend/config.php');
 
 $id_user = $_GET['id'] ?? null;

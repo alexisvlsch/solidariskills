@@ -1,12 +1,10 @@
 <?php
+require_once('../admin_auth.php');
 
 // Connexion à la base de données
 require_once('../../../../backend/config.php'); 
 
 // Vérification de la session
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Vérifie que l’ID est présent dans l’URL
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
